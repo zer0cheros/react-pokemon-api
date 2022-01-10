@@ -6,7 +6,7 @@ import './App.css'
 
 
 function App() {
-  const [pokemon, setPokemon, pokemonImg] = useState([])
+  const [pokemon, setPokemon] = useState([])
   const [currentPage, setCurrentPage] = useState("https://pokeapi.co/api/v2/pokemon?offset=0&limit=20")
   const [nextPage, setNextPage] = useState()
   const [prevPage, setPrevPage] = useState()
