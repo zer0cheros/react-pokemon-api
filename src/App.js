@@ -11,11 +11,18 @@ function App() {
   const [nextPage, setNextPage] = useState()
   const [prevPage, setPrevPage] = useState()
   const [loading, setLoadning] = useState(true)
-  
-
-  useEffect(()=>{
+  const [search, setSearch] = useState('')
+  let cancel;
+  function handleSearch(){
+    if(search == ''){
+      fetchPokemon()
+    }else {
+      const result = pokemon.filter(data => data.startsWith(search))
+      setPokemon(result)
+    }
+  }
+  function fetchPokemon(){
     setLoadning(true)
-    let cancel
     axios.get(currentPage, {
       cancelToken: new axios.CancelToken(stop => cancel = stop)
     }).then(res =>{
@@ -24,6 +31,9 @@ function App() {
     setPrevPage(res.data.previous)
     setPokemon(res.data.results.map(p=> p.name))
   })
+  }
+  useEffect(()=>{
+    fetchPokemon()
   return ()=> cancel()
   }, [currentPage])
   
@@ -38,6 +48,12 @@ function App() {
   }
   return (
     <>
+    <div>
+            <input type='text' onChange={({target}) =>{
+                setSearch(target.value)
+            }}></input>
+            <button onClick={handleSearch}>Search</button>
+      </div>
     <PokemonList pokemon={pokemon}/>
     <PageNavigation
       gotonext={nextPage ? gotonext : null}
